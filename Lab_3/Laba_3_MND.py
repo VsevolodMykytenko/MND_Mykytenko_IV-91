@@ -151,6 +151,10 @@ class Laba_3:
         else:
             print('Математична модель не адекватна експериментальним даним')
 
+        print('\nКількість значимих коефіцієнтів:', len(final_k))
+
 
 experiment = Laba_3(7, 8)
 experiment.all_toogether()
+
+
