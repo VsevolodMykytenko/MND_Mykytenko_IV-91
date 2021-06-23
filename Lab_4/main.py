@@ -2,7 +2,7 @@ import random
 import numpy as np
 from numpy.linalg import solve
 from scipy.stats import f, t
-
+import time
 
 
 
@@ -73,6 +73,7 @@ def main(n):
         x2x3[i] = x2[i] * x3[i]
         x1x2x3[i] = x1[i] * x2[i] * x3[i]
     # середні у
+    koh_begin = time.clock()
     Y_average = []
     for i in range(len(y_matrix)):
         Y_average.append(np.mean(y_matrix[i], axis=0))
@@ -103,6 +104,7 @@ def main(n):
                                                                                                                     ai[6],
                                                                                                                     ai[7]))
     # вивід даних
+    print("Час виконання перевірки за критерієм Кохрена: " + str(time.clock() - koh_begin))
     print("Рівняння регресії для нормованих факторів: \n" "y = {} + {}*x1 + {}*x2 + {}*x3 + {}*x1x2 + {}*x1x3 +"
           " {}*x2x3 + {}*x1x2x3".format(bi[0], bi[1], bi[2], bi[3], bi[4], bi[5], bi[6], bi[7]))
 
@@ -129,6 +131,7 @@ def main(n):
         main(n + 1)
 
     # критерій Стьюдента
+    student_begin = time.clock()
     print(" Перевірка значущості коефіцієнтів за критерієм Стьюдента")
     sb = sum(dispersions) / len(dispersions)
     sbs = (sb / (8 * 3)) ** 0.5
@@ -153,6 +156,7 @@ def main(n):
             d += 1
 
     # вивід
+    print("Час виконання перевірки за критерієм Стьоюдента: "+ str(time.clock()-student_begin))
     print("Значущі коефіцієнти регресії:", coef_1)
     print("Незначущі коефіцієнти регресії:", coef_2)
 
@@ -164,6 +168,7 @@ def main(n):
     print("Значення з отриманими коефіцієнтами:\n", y_st)
 
     # критерій Фішера
+    phisher_begin = time.clock()
     print("\nПеревірка адекватності за критерієм Фішера\n")
     Sad = m * sum([(y_st[i] - Y_average[i]) ** 2 for i in range(8)]) / (n - d)
     Fp = Sad / sb
@@ -172,6 +177,6 @@ def main(n):
         print("Рівняння регресії адекватне при рівні значимості 0.05")
     else:
         print("Рівняння регресії неадекватне при рівні значимості 0.05")
-
+    print("Час виконання перевірки за критерієм Фішера: " + str(time.clock() - phisher_begin))
 
 main(8)
