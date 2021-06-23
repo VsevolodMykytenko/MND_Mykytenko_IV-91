@@ -4,7 +4,7 @@ from scipy.stats import f, t
 from functools import partial
 from pyDOE2 import *
 from prettytable import PrettyTable
-from time import time
+from time import time, clock
 
 x_range = ((-3, 10), (-8, 2), (-6, 1))
 y_min = 200 + int(sum([x[0] for x in x_range]) / 3)
@@ -142,12 +142,15 @@ def checkFull(x, y, b, n, m):
 
     ck = time() - ck
     print(f'\nКритерій Кохрена:\ngp = {gp}')
+    begin = clock()
     if gp < g_kr:
         print('Дисперсія однорідна')
     else:
         print("Дисперсія неонорідна")
         m += 1
         start(n, m)
+    end = clock()
+
     cs = time()
     skv = s_kv(y, y_aver, n, m)
     skv_aver = sum(skv) / n
@@ -190,7 +193,7 @@ def checkFull(x, y, b, n, m):
     print('\nКритерій Фішера:')
     print('fp =', f_p)
     print('ft =', f_t)
-    if f_p < f_t:
+    if f_p < f_t and end-begin <= 0.1:
         print('Математична модель адекватна')
     else:
         print('Математична модель неадекватна')
